@@ -1,0 +1,41 @@
+dict_keys(['input_ids', 
+            'input_mask', 
+            'segment_ids', 
+            'identity1_label_ids',
+             'ask_know_label_ids', 
+             'ask_today_label_ids', 
+             'ask_tomorrow_label_ids', 
+             'twice_label_ids', 
+             'once1_label_ids', 
+             'request_label_ids', 
+             'ask_know_loss_multiplier', 
+             'ask_today_loss_multiplier', 
+             'ask_tomorrow_loss_multiplier', 
+             'identity1_loss_multiplier', 
+             'twice_loss_multiplier', 
+             'once1_loss_multiplier', 
+             'request_loss_multiplier'])
+             
+             
+
+items:dict_items([
+    
+    ('input_ids', [101, 800, 4385, 1762, 3300, 4157, 752, 1036, 671, 702, 6820, 1762, 1962, 1416, 102]), 
+    ('input_mask', [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]), 
+    ('segment_ids', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), 
+    ('identity1_label_ids', 3), 
+    ('ask_know_label_ids', 0), 
+    ('ask_today_label_ids', 0), 
+    ('ask_tomorrow_label_ids', 0), 
+    ('twice_label_ids', 0), 
+    ('once1_label_ids', 0), 
+    ('request_label_ids', 0), 
+    ('ask_know_loss_multiplier', 0), 
+    ('ask_today_loss_multiplier', 0),
+    ('ask_tomorrow_loss_multiplier', 0), 
+    ('identity1_loss_multiplier', 1), 
+    ('twice_loss_multiplier', 0), 
+    ('once1_loss_multiplier', 0), 
+    ('request_loss_multiplier', 0)
+    
+    ]) 
