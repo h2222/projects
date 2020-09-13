@@ -1,0 +1,1 @@
+image_project是个根据背景色差检测的截图工具, utils是常用的NLP工具包, omall是个CTR项目(用于TF和模型学习)
