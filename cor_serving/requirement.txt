@@ -1,0 +1,6 @@
+flask==1.0.0
+flask-cors
+aiohttp==3.0.3
+six==1.11.0
+tensorflow==1.14.0
+numpy==1.16.0

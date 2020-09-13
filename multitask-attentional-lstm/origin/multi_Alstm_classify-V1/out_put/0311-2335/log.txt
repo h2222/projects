@@ -1,0 +1,169 @@
+WARNING:tensorflow:From ./models/attn_bi_lstm.py:39: BasicLSTMCell.__init__ (from tensorflow.python.ops.rnn_cell_impl) is deprecated and will be removed in a future version.
+Instructions for updating:
+This class is deprecated, please use tf.nn.rnn_cell.LSTMCell, which supports all the feature this cell currently has. Please replace the existing code with tf.nn.rnn_cell.LSTMCell(name='basic_lstm_cell').
+Process ID: 145928, Process Parent ID: 1
+Config_File = ./Config/config.cfg
+Extra_Args = []
+self.save_dir ./Config/config.cfg
+Loaded config file sucessfully!
+data_dir = ./data_20000_node
+max_len = 32
+min_len_word = 1
+concat_in_node = False
+segment = pyltp
+cws_model_path = /home/zengbin.gao/NLP/cws.model
+classification_combine = True
+use_cols = type_robot,msg_del_dup,type,type_combine
+cls_type = ask_know,ask_today,ask_tomorrow,once,request,twice,identity,dealh,dealml
+save_dir = ./out_put/out_put_03_11_01
+tokenizer_path = ./out_put/out_put_03_11_01/this_tokenizer.pickle
+config_path = ./out_put/out_put_03_11_01/this_config.cfg
+model_path = ./out_put/out_put_03_11_01/this_config.cfg
+save_model_name = MyModel
+checkpoint_from_epoch = 0
+checkpoint_num = 2
+train_sample = ./out_put/out_put_03_11_01/train-sample
+test_sample = ./out_put/out_put_03_11_01/test-sample
+use_cuda = False
+device = -1
+vocab_size = 0
+n_class = 0
+embedding_size = 128
+hidden_size = 128
+dropout_keep_prob = 0.5
+learning_rate = 0.0012
+keep_prob = 0.5
+num_layers = 2
+is_train = True
+train_epochs = 30
+train_steps = 50
+batch_size = 32
+evaluate_every = 100
+path_model_predict = ./out_put/out_put_03_11_01
+name_model_predict = MyModel
+seed_num = 666
+
+Loading Data......
+name ask_know
+Train[type_combine]: ['invalid' 'no' 'yes']
+Test[type_combine]: ['invalid' 'no' 'yes']
+Length Train / Test : 8679 / 952
+Number of classification: 3
+type2id: {'invalid': 0, 'no': 2, 'yes': 1}.
+id2type: {0: 'invalid', 2: 'no', 1: 'yes'}.
+Using PyLTP to do chinese-word-segment......
+Using PyLTP to do chinese-word-segment......
+dict_id {0: 'invalid', 2: 'no', 1: 'yes'}
+name ask_today
+Train[type_combine]: ['invalid' 'no' 'yes']
+Test[type_combine]: ['invalid' 'no' 'yes']
+Length Train / Test : 23086 / 880
+Number of classification: 3
+type2id: {'invalid': 0, 'no': 2, 'yes': 1}.
+id2type: {0: 'invalid', 2: 'no', 1: 'yes'}.
+Using PyLTP to do chinese-word-segment......
+Using PyLTP to do chinese-word-segment......
+dict_id {0: 'invalid', 2: 'no', 1: 'yes'}
+name ask_tomorrow
+Train[type_combine]: ['invalid' 'no' 'yes']
+Test[type_combine]: ['invalid' 'no' 'yes']
+Length Train / Test : 14232 / 531
+Number of classification: 3
+type2id: {'invalid': 0, 'no': 2, 'yes': 1}.
+id2type: {0: 'invalid', 2: 'no', 1: 'yes'}.
+Using PyLTP to do chinese-word-segment......
+Using PyLTP to do chinese-word-segment......
+dict_id {0: 'invalid', 2: 'no', 1: 'yes'}
+name once
+Train[type_combine]: ['deny_money' 'invalid' 'no' 'yes']
+Test[type_combine]: ['invalid' 'no' 'yes']
+Length Train / Test : 28353 / 5208
+Number of classification: 4
+type2id: {'deny_money': 0, 'invalid': 0, 'no': 2, 'yes': 1}.
+id2type: {0: 'invalid', 2: 'no', 1: 'yes'}.
+Using PyLTP to do chinese-word-segment......
+Using PyLTP to do chinese-word-segment......
+dict_id {0: 'invalid', 2: 'no', 1: 'yes'}
+name request
+Train[type_combine]: ['invalid' 'no' 'yes']
+Test[type_combine]: ['invalid' 'no' 'yes']
+Length Train / Test : 3388 / 575
+Number of classification: 3
+type2id: {'invalid': 0, 'no': 2, 'yes': 1}.
+id2type: {0: 'invalid', 2: 'no', 1: 'yes'}.
+Using PyLTP to do chinese-word-segment......
+Using PyLTP to do chinese-word-segment......
+dict_id {0: 'invalid', 2: 'no', 1: 'yes'}
+name twice
+Train[type_combine]: ['invalid' 'no' 'yes']
+Test[type_combine]: ['invalid' 'no' 'yes']
+Length Train / Test : 24411 / 584
+Number of classification: 3
+type2id: {'invalid': 0, 'no': 2, 'yes': 1}.
+id2type: {0: 'invalid', 2: 'no', 1: 'yes'}.
+Using PyLTP to do chinese-word-segment......
+Using PyLTP to do chinese-word-segment......
+dict_id {0: 'invalid', 2: 'no', 1: 'yes'}
+name identity
+Train[type_combine]: ['invalid' 'no' 'yes']
+Test[type_combine]: ['invalid' 'no' 'yes']
+Length Train / Test : 22542 / 8622
+Number of classification: 3
+type2id: {'invalid': 0, 'no': 2, 'yes': 1}.
+id2type: {0: 'invalid', 2: 'no', 1: 'yes'}.
+Using PyLTP to do chinese-word-segment......
+Using PyLTP to do chinese-word-segment......
+dict_id {0: 'invalid', 2: 'no', 1: 'yes'}
+name dealh
+Train[type_combine]: ['invalid' 'no' 'yes']
+Test[type_combine]: ['invalid' 'no' 'yes']
+Length Train / Test : 1532 / 384
+Number of classification: 3
+type2id: {'invalid': 0, 'no': 2, 'yes': 1}.
+id2type: {0: 'invalid', 2: 'no', 1: 'yes'}.
+Using PyLTP to do chinese-word-segment......
+Using PyLTP to do chinese-word-segment......
+dict_id {0: 'invalid', 2: 'no', 1: 'yes'}
+name dealml
+Train[type_combine]: ['invalid' 'no' 'yes']
+Test[type_combine]: ['invalid' 'no' 'yes']
+Length Train / Test : 4868 / 1217
+Number of classification: 3
+type2id: {'invalid': 0, 'no': 2, 'yes': 1}.
+id2type: {0: 'invalid', 2: 'no', 1: 'yes'}.
+Using PyLTP to do chinese-word-segment......
+Using PyLTP to do chinese-word-segment......
+dict_id {0: 'invalid', 2: 'no', 1: 'yes'}
+Successfully saved the tokenizer to ./out_put/out_put_03_11_01/this_tokenizer.pickle
+n_class = 3
+vocab_size = 131093
+class 3
+cls_type ['ask_know', 'ask_today', 'ask_tomorrow', 'once', 'request', 'twice', 'identity', 'dealh', 'dealml']
+building graph
+Traceback (most recent call last):
+  File "/opt/anaconda3-5.1.0/lib/python3.6/site-packages/tensorflow/python/framework/ops.py", line 1626, in _create_c_op
+    c_op = c_api.TF_FinishOperation(op_desc)
+tensorflow.python.framework.errors_impl.InvalidArgumentError: Dimensions must be equal, but are 128 and 256 for 'MatMul' (op: 'MatMul') with input shapes: [?,128], [256,1].
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "./models/attn_bi_lstm.py", line 147, in <module>
+    classifier.build_graph()
+  File "./models/attn_bi_lstm.py", line 73, in build_graph
+    tf.reshape(W, [-1, 1])),
+  File "/opt/anaconda3-5.1.0/lib/python3.6/site-packages/tensorflow/python/ops/math_ops.py", line 2053, in matmul
+    a, b, transpose_a=transpose_a, transpose_b=transpose_b, name=name)
+  File "/opt/anaconda3-5.1.0/lib/python3.6/site-packages/tensorflow/python/ops/gen_math_ops.py", line 4560, in mat_mul
+    name=name)
+  File "/opt/anaconda3-5.1.0/lib/python3.6/site-packages/tensorflow/python/framework/op_def_library.py", line 787, in _apply_op_helper
+    op_def=op_def)
+  File "/opt/anaconda3-5.1.0/lib/python3.6/site-packages/tensorflow/python/util/deprecation.py", line 488, in new_func
+    return func(*args, **kwargs)
+  File "/opt/anaconda3-5.1.0/lib/python3.6/site-packages/tensorflow/python/framework/ops.py", line 3272, in create_op
+    op_def=op_def)
+  File "/opt/anaconda3-5.1.0/lib/python3.6/site-packages/tensorflow/python/framework/ops.py", line 1790, in __init__
+    control_input_ops)
+  File "/opt/anaconda3-5.1.0/lib/python3.6/site-packages/tensorflow/python/framework/ops.py", line 1629, in _create_c_op
+    raise ValueError(str(e))
+ValueError: Dimensions must be equal, but are 128 and 256 for 'MatMul' (op: 'MatMul') with input shapes: [?,128], [256,1].
