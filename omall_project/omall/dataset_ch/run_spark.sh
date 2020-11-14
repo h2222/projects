@@ -1,1 +1,0 @@
-spark-submit --queue algo_spark --master yarn-client --num-executors 3 --executor-cores 3 --executor-memory 4G --jars /home/hdfs/algo-offline-job/omall/dataset_new/spark-tensorflow-connector_2.11-1.10.0.jar click_history_with_label.py 15 2020-05-31
