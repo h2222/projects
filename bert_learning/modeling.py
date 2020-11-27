@@ -211,7 +211,8 @@ def embedding_lookup(input_ids,
                      initializer_range=0.02,
                      word_embedding_name='word_embedding',
                      use_one_hot_embedding=True):
-
+    
+    print("**embedding_lookup**"*5)
     # 该函数默认输入的形状为[batch_size, seq_length, input_num]
     # 如果输入为2D的[batch_size, seq_length]，则扩展到[batch_size, seq_length, 1]
     if input_ids.shape.ndims == 2:
@@ -258,7 +259,7 @@ def embedding_lookup(input_ids,
     # print([input_shape[-1]* embedding_size])
     # print(input_shape[0:-1] + [input_shape[-1]* embedding_size])
     
-    # output shape -> [最大]
+    # output shape -> [最大] (该步骤的目的为还原batch)
     output = tf.reshape(output,
                         input_shape[0:-1] + [input_shape[-1] * embedding_size])
     
@@ -1017,7 +1018,8 @@ if __name__ == "__main__":
     # d = {'vocab_size':500}
     # b = BertConfig.from_dict(d)
     # print(b.to_json_string())
-    input_ids = convert_by_vocab("大叔大婶大所多")    
+    input_ids = convert_by_vocab("大叔大婶大所多")  
+    print("input_ids:", input_ids) 
     input_ids = tf.constant([input_ids])
     # segment_embedding, 表示该句子的7个词都属于该句子
     # 如果有两句话则可以表示为 tf.constant([[1,1,...], [2,2,...]])
