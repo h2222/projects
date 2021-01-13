@@ -111,6 +111,7 @@ class Classification(TopLayer):
     '''
 
     def create_batch_loss(self, labels, logits,  num_classes):
+        # param 不考虑label平滑
         if self.params.label_smoothing > 0:
             print('num_classes', num_classes)
             one_hot_labels = tf.one_hot(labels, depth=num_classes)
@@ -118,6 +119,7 @@ class Classification(TopLayer):
                 one_hot_labels, logits,
                 label_smoothing=self.params.label_smoothing)
         else:
+            # label 为真实label ,  logit 为对应label的概率
             batch_loss = tf.losses.sparse_softmax_cross_entropy(
                 labels, logits)
 
@@ -128,6 +130,8 @@ class Classification(TopLayer):
     def __call__(self, features, hidden_feature, mode, problem_name, mask=None):
         hidden_feature = hidden_feature['pooled']
         scope_name = self.params.share_top[problem_name]
+        
+        ## 训练loss 计算 ##
         if mode == tf.estimator.ModeKeys.TRAIN:
             hidden_feature = tf.nn.dropout(
                 hidden_feature,
@@ -137,9 +141,11 @@ class Classification(TopLayer):
             num_classes = self.params.num_classes[problem_name]
         else:
             num_classes = mask.shape[0]
-        # make hidden model
+        # make hidden model (本project中什么也没做!!!)
         hidden_feature = self.make_hidden_model(
             features, hidden_feature, mode, 'pooled')
+        ### !!! 在这里 !!! bert -> pooled_output[首位置的输出][b, hidden_size]  -> 
+        #                 pooled_output_dropout[b, hidden_size] ->  nums_classes_prob[b, num_class] 
         logits = dense_layer(num_classes, hidden_feature, mode, 1.0, None)
         self.logits = logits
         if mask is not None:
@@ -148,6 +154,7 @@ class Classification(TopLayer):
         ## 训练返回 阶段loss
         if mode == tf.estimator.ModeKeys.TRAIN:
             labels = features['%s_label_ids' % problem_name]
+            # 返回 batch loss
             batch_loss = self.create_batch_loss(labels, logits, num_classes)
             self.loss = self.create_loss(
                 batch_loss, features['%s_loss_multiplier' % problem_name])

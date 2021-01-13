@@ -149,15 +149,20 @@ class BertMultiTask():
             feature_this_round = features
             hidden_feature_this_round = hidden_feature
         else:
+            # 在input_fn 中有些哪里来的 loss_multipier
             multiplier_name = '%s_loss_multiplier' % problem if self.params.problem_type[
                 problem] != 'pretrain' else 'masked_lm_loss_multiplier'
 
+            # 寻找需要
             record_ind = tf.where(tf.cast(
                 features[multiplier_name], tf.bool))
 
             hidden_feature_this_round = {}
             for hidden_feature_name in hidden_feature:
-                if hidden_feature_name != 'embed_table':
+                if hidden_feature_name != 'embed_table': # all, pooled, seq, ,.... 
+                    # tf.gather_nd record_in 位置索引, hidden_feature: tensor
+                    # 对对应位置的参数进行索引
+                    # wiki: tensorflow.org/api_docs/python/tf/gather_nd
                     hidden_feature_this_round[hidden_feature_name] = tf.gather_nd(
                         hidden_feature[hidden_feature_name], record_ind
                     )
@@ -218,10 +223,11 @@ class BertMultiTask():
                 top_scope_name = self.get_scope_name(problem)
 
                 # WARNING: Potential nan created here!
-                # TODO: Fix this.
+                # TODO: Fix this.  从这开始获取多任务数据
                 if len(self.params.run_problem_list) > 1:
                     # 抓取问题特征， 将多任根据特征进行分类， get_features_for_problem()
                     # 返回 feature_this_name 为字典，k 为分类问题的名称， v为该分类问题的tensor
+                    # 获取对应的特征(不必要的特征去除)
                     feature_this_round, hidden_feature_this_round = self.get_features_for_problem(
                         features, hidden_feature, problem, mode)
                 else:
@@ -273,7 +279,7 @@ class BertMultiTask():
         
         ##
         for problem_dict in self.params.run_problem_list:
-            ## 循环每一个problem
+            ## 循环每一个problem(多每一个任务都算一遍loss)
             for problem in problem_dict:
                 ## 本轮特征
                 feature_this_round = features[problem]
@@ -541,6 +547,7 @@ class BertMultiTask():
     def get_model_fn(self, warm_start=False):
         def model_fn(features, labels, mode, params):
             # 本处打印 featuresss
+            
             print('featuressss', features)
             
             ## 从body函数中返回 隐藏变量
@@ -548,6 +555,8 @@ class BertMultiTask():
                 features, mode)
 
             # hidden import
+            # fetures 为 input_mask, input_ids, segement_ids
+            # hidden_feature, bert中搜所有的输出
             problem_sep_features, hidden_feature = self.hidden(
                 features, hidden_feature, mode)
 

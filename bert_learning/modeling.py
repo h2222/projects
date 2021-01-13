@@ -845,7 +845,7 @@ def transformer_model(input_tensor,  # 经过embedding 和 postprocessing 处理
             # 将每层的输出 tensor 维度调整为与 input_tensor 一致 []
             final_output = reshape_from_matrix(layer_output, input_shape)
             final_outputs.append(final_output)
-        return final_output
+        return final_outputs
     else:
         final_output = reshape_from_matrix(prev_output, input_shape)
     
@@ -956,7 +956,7 @@ class BertModel:
                 )
 
                 # sequence_output 是 all_encoder_layers 的最后一层
-                self.sequence_output = self.all_encoder_layers
+                self.sequence_output = self.all_encoder_layers[-1]
 
 
                 # pooler 层, [batch_size, seq_length, hidden_size] -- > [batch_size, hidden_size]

@@ -26,7 +26,7 @@ class Configurable(object):
                     config.set(section, k, v)
         # 创建目录
         self._config = config
-        print("self.save_dir",config_file)
+        print("self.save_dir", config_file)
         if not os.path.isdir(self.save_dir):
             os.mkdir(self.save_dir)
         # 记录参数 写入文件

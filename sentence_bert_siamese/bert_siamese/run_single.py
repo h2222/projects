@@ -340,10 +340,10 @@ def convert_single_example(ex_index, example, label_list, max_seq_length, tokeni
     # The convention in BERT is:
     # (a) For sequence pairs:
     #    tokens:     [CLS] is this jack ##son ##ville ? [SEP] no it is not . [SEP]
-    #    type_ids: 0         0    0        0        0         0             0 0         1    1    1    1     1 1
+    #    type_ids:     0    0   0    0    0      0    0   0    1  1  1   1  1  1
     # (b) For single sequences:
     #    tokens:     [CLS] the dog is hairy . [SEP]
-    #    type_ids: 0         0     0     0    0         0 0
+    #    type_ids:     0    0   0   0   0   0   0
     #
     # Where "type_ids" are used to indicate whether this is the first
     # sequence or the second sequence. The embedding vectors for `type=0` and
@@ -374,6 +374,7 @@ def convert_single_example(ex_index, example, label_list, max_seq_length, tokeni
 
     input_ids = tokenizer.convert_tokens_to_ids(tokens)
 
+    # 2020-11-27 到这
     # The mask has 1 for real tokens and 0 for padding tokens. Only real
     # tokens are attended to.
     input_mask = [1] * len(input_ids)
@@ -389,7 +390,7 @@ def convert_single_example(ex_index, example, label_list, max_seq_length, tokeni
     assert len(segment_ids) == max_seq_length
 
     label_id = label_map[example.label]
-    if ex_index < 5:
+    if ex_index < 5: # 前5个训练样例进行打印
         tf.logging.info("*** Example ***")
         tf.logging.info("guid: %s" % (example.guid))
         tf.logging.info(
@@ -421,6 +422,7 @@ def file_based_convert_examples_to_features(
         if ex_index % 10000 == 0:
             tf.logging.info("Writing example %d of %d" % (ex_index, len(examples)))
 
+        # 转 text 为 bert 输入数据
         feature = convert_single_example(
             ex_index, example, label_list, max_seq_length, tokenizer
         )
@@ -437,7 +439,7 @@ def file_based_convert_examples_to_features(
         features["is_real_example"] = create_int_feature([int(feature.is_real_example)])
 
         tf_example = tf.train.Example(features=tf.train.Features(feature=features))
-        writer.write(tf_example.SerializeToString())
+        writer.write(tf_example.SerializeToString()) #将bert训练特征写入对应文件
     writer.close()
 
 
@@ -491,7 +493,9 @@ def file_based_input_fn_builder(input_file, seq_length, is_training, drop_remain
 
 
 def _truncate_seq_pair(tokens_a, tokens_b, max_length):
-    """Truncates a sequence pair in place to the maximum length."""
+    """Truncates a sequence pair in place to the maximum length.
+        将 句a 和 句b 修改为长度相同的句子
+    """
 
     # This is a simple heuristic which will always truncate the longer sequence
     # one token at a time. This makes more sense than truncating an equal percent
@@ -629,7 +633,7 @@ def model_fn_builder(
         tvars = tf.trainable_variables()
         initialized_variable_names = {}
         scaffold_fn = None
-        if init_checkpoint:
+        if init_checkpoint: # 从预训练文件中获取变量名称
             (
                 assignment_map,
                 initialized_variable_names,

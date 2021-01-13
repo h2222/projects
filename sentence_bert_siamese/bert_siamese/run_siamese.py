@@ -634,7 +634,7 @@ def convert_single_example2(ex_index, example, label_list, max_seq_length, token
     # Account for [CLS] and [SEP] with "- 2"
     #    if len(tokens_a) > max_seq_length - 2:
     #        tokens_a = tokens_a[0:(max_seq_length - 2)]
-
+    # 分别处理 token_a 和 token_b 做到孪生网络
     if len(tokens_a) > max_seq_length - 2:
         tokens_a = tokens_a[: (max_seq_length - 2)]
     if len(tokens_b) > max_seq_length - 2:
@@ -667,7 +667,9 @@ def convert_single_example2(ex_index, example, label_list, max_seq_length, token
     input_b_ids = tokenizer.convert_tokens_to_ids(tokens_b)
 
     # The mask has 1 for real tokens and 0 for padding tokens. Only real
-    # tokens are attended to.
+    # tokens are attended to. # 1 是真值, 0 是padding 和 mask token , 
+    # 在bert计算中, mask公式为 mask_weight = (1 - 1或0) * -10000 如果此处的token mask 为 0, 则mask权重变为 -10000 
+    # 加在原始softmax(attention score)上, attention score 就会无限小(softmax性质)
     input_a_mask = [1] * len(input_a_ids)
     input_b_mask = [1] * len(input_b_ids)
 
@@ -743,7 +745,7 @@ def file_based_convert_examples_to_features(
         features["is_real_example"] = create_int_feature([int(feature.is_real_example)])
 
         tf_example = tf.train.Example(features=tf.train.Features(feature=features))
-        writer.write(tf_example.SerializeToString())
+        writer.write(tf_example.SerializeToString()) #写入模型读取数据文件
     writer.close()
 
 
@@ -859,15 +861,25 @@ def create_model(
     # tvars = tf.trainable_variables()
     # output_layer_a = model.get_pooled_output_a()
     # output_layer_b = model.get_pooled_output_b()
+    # 孪生网络改造, 输入token a 和 b 的结果, 计算相似度
+    # sequence_output shape: [b, seq_len, hidden_size]
     sequence_output_a = model.get_sequence_output_a()
     sequence_output_b = model.get_sequence_output_b()
 
-    mul_mask = lambda x, m: (x * tf.expand_dims(m, axis=-1))[:, 1:, :]
+    mul_mask = lambda x, m: (x * tf.expand_dims(m, axis=-1))[:, 1:, :] # 不要0 位置token 是因为 0 位置的是[CLS]
+    # 计算去除 (加入mask的句子的词向量) / (整个句子的词向量) 生成句向量 
+    # reduce_sum -> x = [[1, 1, 1], [1, 1, 1]]   reduce_sum(x, 1, keepdims=True) -> [[3], [3]]
+    #                                            reduce_sum(x, 1, keepdims=False) -> [3, 3]
+    #                                            reduce_sum(x, 0) -> 6
+    # [b, seq_len -1,]
     masked_reduce_mean = lambda x, m: tf.reduce_sum(mul_mask(x, m), axis=1) / (
         tf.reduce_sum(m, axis=1, keepdims=True) + 1e-10 - 1
     )
     input_a_mask = tf.cast(input_a_mask, tf.float32)
     input_b_mask = tf.cast(input_b_mask, tf.float32)
+
+
+    # ????? 这是什么操作?
     output_layer_a = masked_reduce_mean(sequence_output_a, input_a_mask)
     output_layer_b = masked_reduce_mean(sequence_output_b, input_b_mask)
     output_layer_a = tf.reduce_max(sequence_output_a, axis=1)
@@ -981,7 +993,7 @@ def model_fn_builder(
 
         tf.logging.info("*** Features ***")
         for name in sorted(features.keys()):
-            tf.logging.info("    name = %s, shape = %s" % (name, features[name].shape))
+            tf.logging.info(" name = %s, shape = %s" % (name, features[name].shape))
 
         input_a_ids = features["input_a_ids"]
         input_b_ids = features["input_b_ids"]
@@ -992,7 +1004,7 @@ def model_fn_builder(
         label_ids = features["label_ids"]
         is_real_example = None
         if "is_real_example" in features:
-            is_real_example = tf.cast(features["is_real_example"], dtype=tf.float32)
+            is_real_example = tf.cast(features["is_real_example"], dtype=tf.float32) # True -> 1. Flase -> 0.
         else:
             is_real_example = tf.ones(tf.shape(label_ids), dtype=tf.float32)
 

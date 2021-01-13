@@ -7,12 +7,20 @@ import pickle
 import types
 import os
 
+from sklearn.preprocessing import MultiLabelBinarizer
+
+
+
 from params import Param
 
 
 
 
 def preprocessing_fn(func):
+    def get_or_make_label_encode(param, task_name):
+        
+        pass
+
     def wapper(param, mode, task_name):
         print(func.__name__)
         print(param.tmp_dir)        
